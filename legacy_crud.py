@@ -1,4 +1,4 @@
-import db_function
+import legacy_db_function
 from tabulate import tabulate
 import os
 
@@ -15,13 +15,13 @@ nameTable = "crud_empregado" # NOME DA TABELA PARA CRIAR E INSERIR OS DADOS
 
 # CRIAR TABELA DE ACORDO COM O NOME DA TABELA E AS COLUNAS:
 
-db_function.dbCreateTable(nameTable,columnsTable)
+legacy_db_function.dbCreateTable(nameTable,columnsTable)
 
 
 # CREATE
 def dbCriarPost(dadosCriarPost,dbColumns):
 
-    conn, cursor = db_function.dbConection()
+    conn, cursor = legacy_db_function.dbConection()
 
     dadosCriarPostComAspas = ["'{}'".format(item) for item in dadosCriarPost]
     cursor.execute("""INSERT INTO public.{} ({}) VALUES ({});""".format(nameTable,", ".join(dbColumns),", ".join(dadosCriarPostComAspas)))
@@ -33,7 +33,7 @@ def dbCriarPost(dadosCriarPost,dbColumns):
 
 # READ
 def dbLerPosts(verificarId = None):
-    conn, cursor = db_function.dbConection()
+    conn, cursor = legacy_db_function.dbConection()
 
     if (verificarId):
         cursor.execute("""SELECT * FROM public.{} WHERE id = {};""".format(nameTable,verificarId))
@@ -43,16 +43,15 @@ def dbLerPosts(verificarId = None):
     nomesColunas = [desc[0] for desc in cursor.description]
     valoresDb = cursor.fetchall()
     
-    print(tabulate(valoresDb, headers=nomesColunas, tablefmt='grid'))
-
     cursor.close()
     conn.close()
 
+    return nomesColunas,valoresDb
 
 # UPDATE
 def dbUpdatePost(dadosAtualizarPosts,dbColumns,idAtualizar):
     
-    conn, cursor = db_function.dbConection()
+    conn, cursor = legacy_db_function.dbConection()
 
     dadosAtualizarPostComAspas = ["'{}'".format(item) for item in dadosAtualizarPosts]
 
@@ -66,7 +65,7 @@ def dbUpdatePost(dadosAtualizarPosts,dbColumns,idAtualizar):
 # DELETE
 def dbDeletePost(idDeletar):
     
-    conn, cursor = db_function.dbConection()
+    conn, cursor = legacy_db_function.dbConection()
 
     cursor.execute("""DELETE FROM public.{} WHERE id = {};""".format(nameTable,int(idDeletar)))
      
@@ -114,7 +113,7 @@ def main():
                 dbDeletePost(idDeletar)
             case '5':
                 interfaceVerificar = False
-main()
+
 
 
 

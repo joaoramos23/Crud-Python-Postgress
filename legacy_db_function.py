@@ -8,7 +8,7 @@ def dbConection():
         database="postgres",
         host="localhost",
         user="postgres",
-        password="123",
+        password="klo5s871",
         port="5432"
     )
 
